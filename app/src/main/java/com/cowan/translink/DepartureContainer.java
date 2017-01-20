@@ -16,9 +16,7 @@ import java.util.List;
  */
 
 public class DepartureContainer extends ArrayAdapter<Departure> {
-    ArrayList<DataSetObserver> dataSetObservers;
 
-    ListView departureListView;
 
     public DepartureContainer(Context context, int resource) {
         super(context, resource);
