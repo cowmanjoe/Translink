@@ -4,7 +4,6 @@ package com.cowan.translink;
  * Created by Cowan on 1/19/2017.
  */
 
-import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
@@ -15,7 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +29,7 @@ public class DepartureDataFetch extends AsyncTask<Integer, Void, List<Departure>
         activityRef = new WeakReference<>(activity);
     }
 
-    public static List<Departure> getDepartures(int stop) {
+    private static List<Departure> getDepartures(int stop) {
         List<Departure> ans = new ArrayList<Departure>();
         Map<Integer, List<String>> lts = getLastTimes(stop);
 
@@ -45,7 +43,7 @@ public class DepartureDataFetch extends AsyncTask<Integer, Void, List<Departure>
         return ans;
     }
 
-    public static List<Departure> getDepartures(int stop, int route) {
+    private static List<Departure> getDepartures(int stop, int route) {
         Map<Integer, List<String>> lts = getLastTimes(stop, route);
         List<Departure> ans = new ArrayList<Departure>();
 
@@ -64,7 +62,7 @@ public class DepartureDataFetch extends AsyncTask<Integer, Void, List<Departure>
         URL url = getURLForLastTimes(stop);
         String data = retrieveDataFromURL(url);
 
-        return findExpectedTimes(data);
+        return TranslinkDataParser.parseDepartureTimes(data);
     }
 
 
@@ -73,7 +71,7 @@ public class DepartureDataFetch extends AsyncTask<Integer, Void, List<Departure>
 
         String data = retrieveDataFromURL(url);
 
-        return findExpectedTimes(data);
+        return TranslinkDataParser.parseDepartureTimes(data);
     }
 
     /**
@@ -146,31 +144,7 @@ public class DepartureDataFetch extends AsyncTask<Integer, Void, List<Departure>
         }
     }
 
-    /**
-     * Parse the text that the API returns on a departure time request
-     * @param data the string received from Translink API
-     * @return mapping of routes to Strings representations of departure times
-     */
-    private static Map<Integer, List<String>> findExpectedTimes(String data) {
-        Map<Integer, List<String>> ans = new HashMap<>();
-        String dataSoFar = data;
-        while (dataSoFar.contains("<RouteNo>")) {
-            dataSoFar = dataSoFar.substring(dataSoFar.indexOf("<RouteNo>") + "<RouteNo>".length());
-            String routeString = dataSoFar.substring(0, dataSoFar.indexOf('<'));
-            int route = Integer.parseInt(routeString);
-            List<String> times = new ArrayList<>();
-            while(dataSoFar.contains("<ExpectedLeaveTime>") &&
-                    (dataSoFar.indexOf("<ExpectedLeaveTime>") < dataSoFar.indexOf("<RouteNo>") ||
-                            !dataSoFar.contains("<RouteNo>"))){
-                int index = dataSoFar.indexOf("<ExpectedLeaveTime>") + "<ExpectedLeaveTime>".length();
-                dataSoFar = dataSoFar.substring(index);
-                String time = dataSoFar.substring(0, dataSoFar.indexOf('<'));
-                times.add(time);
-            }
-            ans.put(route, times);
-        }
-        return ans;
-    }
+
 
     @Override
     protected List<Departure> doInBackground(Integer... stops) {
