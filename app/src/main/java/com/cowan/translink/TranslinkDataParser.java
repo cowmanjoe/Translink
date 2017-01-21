@@ -29,7 +29,7 @@ public class TranslinkDataParser {
                             !dataSoFar.contains("<RouteNo>"))){
                 int index = dataSoFar.indexOf("<ExpectedLeaveTime>") + "<ExpectedLeaveTime>".length();
                 dataSoFar = dataSoFar.substring(index);
-                String time = dataSoFar.substring(0, dataSoFar.indexOf('<'));
+                String time = dataSoFar.substring(0, dataSoFar.indexOf('m') + 1);
                 times.add(time);
             }
             ans.put(route, times);

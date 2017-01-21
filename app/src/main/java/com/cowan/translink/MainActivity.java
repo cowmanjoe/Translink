@@ -13,12 +13,13 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayAdapter<Departure> departListPopulator;
 
+    public static MainActivity instance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        DepartureDataFetch.updateActivity(this);
+        instance = this;
 
         departListPopulator = new ArrayAdapter<>(this, R.layout.activity_departure_list);
         ListView departureList = (ListView) findViewById(R.id.departure_list);

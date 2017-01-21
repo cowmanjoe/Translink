@@ -4,7 +4,7 @@ TODO:
 - Support for specific routes at a stop 
 - Make adding the same stop not create duplicates 
 - Refresh button 
-- Better organize classes, especially DepartureDataFetch, maybe make new class to handle parsing 
+- Better organize classes
 - Search for nearby stops  
 - Clean up UI 
 - Cleaner list (maybe a table) 
